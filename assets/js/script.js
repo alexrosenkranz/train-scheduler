@@ -34,7 +34,7 @@ $(document).ready(function(){
     trainTime = $('#firstTrain').val().trim();
     trainFreq = $('#trainFrequency').val().trim();
 
-    trainTime = moment(trainTime, "HH:mm").unix();
+    trainTime = moment.utc(trainTime, "HH:mm").unix();
 
 
     // Clear form data
@@ -56,13 +56,21 @@ $(document).ready(function(){
 
   // Reference Firebase when page loads to check for stored information 
   dataRef.ref().on('child_added', function(childSnapshot){
-    console.table(childSnapshot.val());
+    console.log(childSnapshot.val());
+
+    var trainStart = childSnapshot.val().trainTime;
+    var timeDiff = currentTime.diff(trainStart, "minutes");
+    var timeBetween = timeDiff % childSnapshot.val().trainFreq;
+
+    minAway = childSnapshot.val().trainFreq - timeBetween;
+    trainTime = currentTime.add(minAway, "minutes");
+
 
     $('tbody').append("<tr class=" + childSnapshot.val() + "><td>" + childSnapshot.val().trainName + "</td><td>" +
       childSnapshot.val().trainDestination + "</td><td>" + 
       childSnapshot.val().trainFreq + "</td><td>" +
-      childSnapshot.val().trainTime + "</td><td>" +
-      childSnapshot.val().minAway + "</td></tr>");
+      moment(trainTime).format("hh:mm") + "</td><td>" +
+      minAway + "</td></tr>");
   }, function(errorObject) {
       console.log("Errors handled: " + errorObject.code);
   });
