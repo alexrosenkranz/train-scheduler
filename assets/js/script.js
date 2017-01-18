@@ -13,13 +13,11 @@ $(document).ready(function(){
   // Declare variables
 
   var dataRef = firebase.database();
-
-  var trainName = '';
-  var trainDestination = '';
-  var trainTime = '';
-  var trainFreq = 0;
-  var minAway = 0;
   var currentTime = moment();
+  // var nextTrain = '';
+  // var trainOnDeck = '';
+  // var timer = '';
+  // var minAway = "";
 
   // Set form function to accept inputs and set them into Firebase Object
     // Make sure time is converted properly for storage (unix)
@@ -29,13 +27,11 @@ $(document).ready(function(){
 
     e.preventDefault();
     // Grab input values
-    trainName = $('#trainName').val().trim();
-    trainDestination = $('#trainDestination').val().trim();
-    trainTime = $('#firstTrain').val().trim();
-    trainFreq = $('#trainFrequency').val().trim();
-
-    trainTime = moment.utc(trainTime, "HH:mm").unix();
-
+    var trainName = $('#trainName').val().trim();
+    var trainDestination = $('#trainDestination').val().trim();
+    // Convert to Unix
+    var trainTime = moment($('#firstTrain').val().trim(),"HH:mm").format("X");
+    var trainFreq = $('#trainFrequency').val().trim();
 
     // Clear form data
     $('#trainName').val('');
@@ -44,43 +40,57 @@ $(document).ready(function(){
     $('#trainFrequency').val('');
 
     // Push to firebase
-    dataRef.ref().push({
+    dataRef.ref().child('trains').push({
       trainName: trainName,
       trainDestination: trainDestination,
       trainTime: trainTime,
       trainFreq: trainFreq,
+
     })
   });
 
 
 
+
   // Reference Firebase when page loads to check for stored information 
-  dataRef.ref().on('child_added', function(childSnapshot){
+  dataRef.ref().child('trains').on('child_added', function(childSnapshot){
+    
     console.log(childSnapshot.val());
+    var trainClass = childSnapshot.key;
+    var trainId = childSnapshot.val();
 
-    var trainStart = childSnapshot.val().trainTime;
-    var timeDiff = currentTime.diff(trainStart, "minutes");
-    var timeBetween = timeDiff % childSnapshot.val().trainFreq;
+    var firstTimeConverted = moment.unix(trainId.trainTime);
+    var timeDiff = moment().diff(moment(firstTimeConverted, 'HH:mm'), 'minutes');
 
-    minAway = childSnapshot.val().trainFreq - timeBetween;
-    trainTime = currentTime.add(minAway, "minutes");
+    var timeDiffCalc = timeDiff % parseInt(trainId.trainFreq);
+    var timeDiffTotal = parseInt(trainId.trainFreq) - timeDiffCalc;
 
+    var newTime;
 
-    $('tbody').append("<tr class=" + childSnapshot.val() + "><td>" + childSnapshot.val().trainName + "</td><td>" +
-      childSnapshot.val().trainDestination + "</td><td>" + 
-      childSnapshot.val().trainFreq + "</td><td>" +
-      moment(trainTime).format("hh:mm") + "</td><td>" +
-      minAway + "</td></tr>");
+    if(timeDiff > 0) {
+      newTime = currentTime.add(timeDiffTotal, 'minutes').format('hh:mm A');
+    } else {
+      newTime = firstTimeConverted.format('hh:mm A');
+      timeDiffTotal = Math.abs(timeDiff - 1);
+    }
+
+    console.log(newTime);
+
+    $('tbody').append("<tr class=" + trainClass + "><td>" + trainId.trainName + "</td><td>" +
+      trainId.trainDestination + "</td><td>" + 
+      trainId.trainFreq + "</td><td>" +
+      newTime + "</td><td>" +
+      timeDiffTotal + "</td><td><button type='button' class='delete' data-train=" + trainClass + ">Remove</button></td></tr>");
   }, function(errorObject) {
       console.log("Errors handled: " + errorObject.code);
   });
 
 
 
-
-
-
-
-
+    $(document).on('click','.delete', function(){
+      var trainKey = $(this).attr('data-train');
+      dataRef.ref("trains/" + trainKey).remove();
+      $('.'+ trainKey).remove();
+    })
 
 });
