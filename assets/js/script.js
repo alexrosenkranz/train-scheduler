@@ -104,7 +104,6 @@ firebase.auth().getRedirectResult().then(function(result) {
   dataRef.ref().child('trains').on('value', function(snapshot){
     $('tbody').empty();
     snapshot.forEach(function(childSnapshot){
-    console.log(childSnapshot.val());
     var trainClass;
     var TrainId;
     var firstTimeConverted = 0;
@@ -146,7 +145,6 @@ firebase.auth().getRedirectResult().then(function(result) {
    // Reference Firebase when page loads to check for stored information 
   dataRef.ref().child('trains').on('child_changed', function(childSnapshot){
     
-    console.log(childSnapshot.val());
     var trainClass;
     var TrainId;
     var firstTimeConverted;
