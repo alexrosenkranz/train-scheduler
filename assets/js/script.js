@@ -110,7 +110,7 @@ $(document).ready(function(){
       timeDiffTotal = Math.abs(timeDiff - 1);
     }
 
-    $('tbody').append("<tr class=" + trainClass + "><td>" + moment().format('hh:mm A') + "</td><td>" + trainId.trainName + "</td><td>" +
+    $('tbody').append("<tr class=" + trainClass + "><td>" + trainId.trainName + "</td><td>" +
       trainId.trainDestination + "</td><td>" + 
       trainId.trainFreq + "</td><td>" +
       newTime + "</td><td>" +
@@ -149,7 +149,7 @@ $(document).ready(function(){
       timeDiffTotal = Math.abs(timeDiff - 1);
     } 
 
-    $('.'+trainClass).html("<td>" + moment().format('hh:mm A') + "</td><td>" + trainId.trainName + "</td><td>" +
+    $('.'+trainClass).html("<td>" + trainId.trainName + "</td><td>" +
       trainId.trainDestination + "</td><td>" + 
       trainId.trainFreq + "</td><td>" +
       newTime + "</td><td>" +
@@ -180,6 +180,10 @@ $(document).ready(function(){
 
     })
     
-  })
+  });
+
+  setInterval(function(){
+    $('small').html(moment().format('hh:mm:ss A'))
+  }, 1000);
 
 });
