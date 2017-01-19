@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Train Schedule</title>
-  <!-- **********************************************
-     * TODO(DEVELOPER): Use your Client ID below. *
-     ********************************************** -->
+
+
 
   <meta name="google-signin-client_id" content="167602757568-k6027cugtilquc0nh7oal29icsbs44ov.apps.googleusercontent.com">
   <meta name="google-signin-cookiepolicy" content="single_host_origin">
@@ -24,69 +23,71 @@
 
         <h2>Current Time<br/><small></small></h2>
         
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <button class="text-center btn signIn">Sign In With Google</button>
       </div>
     </div>
 
-    <div class="row">
-      <div class="panel-primary panel">
-        <div class="panel-heading">
-          <h3 class="panel-title">Train Schedule</h3>
-        </div>
-        <div class="panel-body">
-          <table class="table table-hover">
-            <thead>
-              
-              <th>Train</th>
-              <th>Destination</th>
-              <th>Frequency</th>
-              <th>Next Arrival</th>
-              <th>Minutes Away</th>
-              <th></th>
-            </thead>
-            
-            <tbody>
-
-            </tbody>
-          
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="panel-primary panel">
-        <div class="panel-heading">
-          <h3 class="panel-title">Add A Train</h3>
-        </div>
-        <div class="panel-body">
-          <form>
-            <div class="form-group">
-              <label for="trainName">Train Name</label>
-              <input type="text" class="form-control" id="trainName" placeholder="Train Name">
-            </div>
-            <div class="form-group">
-              <label for="trainDestination">Destination</label>
-              <input type="text" class="form-control" id="trainDestination" placeholder="Destination">
-            </div>
-            <div class="form-group">
-              <label for="firstTrain">First Train Time (HH:mm Military Time)</label>
-              <input type="text" class="form-control" id="firstTrain" placeholder="First Train Time">
-            </div>
-            <fieldset disabled>
-              <div class="form-group hidden">
-                <label for="trainKey">Train Key</label>
-                <input type="text" id="trainKey" class="form-control" placeholder="Disabled input">
+    <div class="row content">
+      <div class="col-sm-12 col-md-3">
+        <div class="panel-primary panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">Train Schedule</h3>
+          </div>
+          <div class="panel-body">
+            <form>
+              <div class="form-group">
+                <label for="trainName">Train Name</label>
+                <input type="text" class="form-control" id="trainName" placeholder="Train Name">
               </div>
-            </fieldset>
-            <div class="form-group">
-              <label for="trainFrequency">Frequency (min)</label>
-              <input type="text" class="form-control" id="trainFrequency" placeholder="Frequency">
-            </div>
-          
-            <button type="submit" class="btn btn-default submit">Submit</button>
-            <button type="reset" class="btn btn-danger reset">Reset</button>
-          </form>
+              <div class="form-group">
+                <label for="trainDestination">Destination</label>
+                <input type="text" class="form-control" id="trainDestination" placeholder="Destination">
+              </div>
+              <div class="form-group">
+                <label for="firstTrain">First Train Time (HH:mm Military Time)</label>
+                <input type="text" class="form-control" id="firstTrain" placeholder="First Train Time">
+              </div>
+              <fieldset disabled>
+                <div class="form-group hidden">
+                  <label for="trainKey">Train Key</label>
+                  <input type="text" id="trainKey" class="form-control" placeholder="Disabled input">
+                </div>
+              </fieldset>
+              <div class="form-group">
+                <label for="trainFrequency">Frequency (min)</label>
+                <input type="text" class="form-control" id="trainFrequency" placeholder="Frequency">
+              </div>
+            
+              <button type="submit" class="btn btn-primary submit">Submit</button>
+              <button type="reset" class="btn btn-danger reset">Reset</button>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-9">
+        <div class="panel-primary panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">Add A Train</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-hover">
+              <thead>
+                
+                <th>Train</th>
+                <th>Destination</th>
+                <th>Frequency</th>
+                <th>Next Arrival</th>
+                <th>Minutes Away</th>
+                <th></th>
+              </thead>
+              
+              <tbody>
+
+              </tbody>
+            
+            </table>
+          </div>
         </div>
       </div>
     </div>
