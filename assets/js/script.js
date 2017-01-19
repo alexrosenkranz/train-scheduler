@@ -13,12 +13,10 @@ $(document).ready(function(){
   // Declare variables
 
   var dataRef = firebase.database();
-  var currentTime = moment();
   var editTrainKey = '';
-  // var nextTrain = '';
-  // var trainOnDeck = '';
-  // var timer = '';
-  // var minAway = "";
+  var fbTime = moment();
+  var newTime;
+
 
   // Set form function to accept inputs and set them into Firebase Object
     // Make sure time is converted properly for storage (unix)
@@ -41,7 +39,7 @@ $(document).ready(function(){
     $('#trainFrequency').val('');
     $('#trainKey').val('');
 
-
+    fbTime = moment().format('X');
     // Push to firebase
     if (editTrainKey == ''){ 
       dataRef.ref().child('trains').push({
@@ -49,6 +47,7 @@ $(document).ready(function(){
         trainDestination: trainDestination,
         trainTime: trainTime,
         trainFreq: trainFreq,
+        currentTime: fbTime,
       })
     } else if (editTrainKey != '') {
       dataRef.ref('trains/' + editTrainKey).update({
@@ -56,42 +55,68 @@ $(document).ready(function(){
         trainDestination: trainDestination,
         trainTime: trainTime,
         trainFreq: trainFreq,
+        currentTime: fbTime,
       })
       editTrainKey = '';
     }
 
   });
 
+  function timeUpdater() {
+    dataRef.ref().child('trains').once('value', function(snapshot){
+      snapshot.forEach(function(childSnapshot){
+        console.log(childSnapshot.val());
+        fbTime = moment().format('X');
+        dataRef.ref('trains/' + childSnapshot.key).update({
+        currentTime: fbTime,
+        })
+      })
+      
+    });
+  }
 
+  setInterval(timeUpdater, 10000);
 
 
   // Reference Firebase when page loads to check for stored information 
-  dataRef.ref().child('trains').on('child_added', function(childSnapshot){
-    
+  dataRef.ref().child('trains').on('value', function(snapshot){
+    $('tbody').empty();
+    snapshot.forEach(function(childSnapshot){
     console.log(childSnapshot.val());
-    var trainClass = childSnapshot.key;
-    var trainId = childSnapshot.val();
+    var trainClass;
+    var TrainId;
+    var firstTimeConverted = 0;
+    var timeDiff = 0;
+    var timeDiffCalc = 0;
+    var timeDiffTotal = 0;
 
-    var firstTimeConverted = moment.unix(trainId.trainTime);
-    var timeDiff = moment().diff(moment(firstTimeConverted, 'HH:mm'), 'minutes');
+    trainClass = childSnapshot.key;
+    trainId = childSnapshot.val();
 
-    var timeDiffCalc = timeDiff % parseInt(trainId.trainFreq);
-    var timeDiffTotal = parseInt(trainId.trainFreq) - timeDiffCalc;
+    firstTimeConverted = moment.unix(trainId.trainTime);
+    timeDiff = moment().diff(moment(firstTimeConverted, 'HH:mm'), 'minutes');
 
-    var newTime;
+    timeDiffCalc = timeDiff % parseInt(trainId.trainFreq);
+    timeDiffTotal = parseInt(trainId.trainFreq) - timeDiffCalc;
 
-    if(timeDiff > 0) {
-      newTime = currentTime.add(timeDiffTotal, 'minutes').format('hh:mm A');
+
+    if(timeDiff >= 0) {
+      newTime = null;
+      newTime = moment().add(timeDiffTotal, 'minutes').format('hh:mm A');
+
     } else {
+      newTime = null;
       newTime = firstTimeConverted.format('hh:mm A');
       timeDiffTotal = Math.abs(timeDiff - 1);
     }
 
-    $('tbody').append("<tr class=" + trainClass + "><td>" + trainId.trainName + "</td><td>" +
+    $('tbody').append("<tr class=" + trainClass + "><td>" + moment().format('hh:mm A') + "</td><td>" + trainId.trainName + "</td><td>" +
       trainId.trainDestination + "</td><td>" + 
       trainId.trainFreq + "</td><td>" +
       newTime + "</td><td>" +
-      timeDiffTotal + "</td><td><button type='button' class='edit' data-train=" + trainClass + ">Edit</button><button type='button' class='delete' data-train=" + trainClass + ">Remove</button></td></tr>");
+      timeDiffTotal + "</td><td><button class='edit btn btn-warning' data-train=" + trainClass + ">Edit</button> <button class='delete btn btn-danger' data-train=" + trainClass + ">Remove</button></td></tr>");
+
+  });
   }, function(errorObject) {
       console.log("Errors handled: " + errorObject.code);
   });
@@ -100,29 +125,37 @@ $(document).ready(function(){
   dataRef.ref().child('trains').on('child_changed', function(childSnapshot){
     
     console.log(childSnapshot.val());
-    var trainClass = childSnapshot.key;
-    var trainId = childSnapshot.val();
+    var trainClass;
+    var TrainId;
+    var firstTimeConverted;
+    var timeDiff;
+    var timeDiffCalc;
+    var timeDiffTotal;
+    
+    trainClass = childSnapshot.key;
+    trainId = childSnapshot.val();
 
-    var firstTimeConverted = moment.unix(trainId.trainTime);
-    var timeDiff = moment().diff(moment(firstTimeConverted, 'HH:mm'), 'minutes');
+    firstTimeConverted = moment.unix(trainId.trainTime);
+    timeDiff = moment().diff(moment(firstTimeConverted, 'HH:mm'), 'minutes');
 
-    var timeDiffCalc = timeDiff % parseInt(trainId.trainFreq);
-    var timeDiffTotal = parseInt(trainId.trainFreq) - timeDiffCalc;
+    timeDiffCalc = timeDiff % parseInt(trainId.trainFreq);
+    timeDiffTotal = parseInt(trainId.trainFreq) - timeDiffCalc;
 
-    var newTime;
 
     if(timeDiff > 0) {
-      newTime = currentTime.add(timeDiffTotal, 'minutes').format('hh:mm A');
+      newTime = moment().add(timeDiffTotal, 'minutes').format('hh:mm A');
     } else {
       newTime = firstTimeConverted.format('hh:mm A');
       timeDiffTotal = Math.abs(timeDiff - 1);
-    }
+    } 
 
-    $('.'+trainClass).html("<td>" + trainId.trainName + "</td><td>" +
+    $('.'+trainClass).html("<td>" + moment().format('hh:mm A') + "</td><td>" + trainId.trainName + "</td><td>" +
       trainId.trainDestination + "</td><td>" + 
       trainId.trainFreq + "</td><td>" +
       newTime + "</td><td>" +
-      timeDiffTotal + "</td><td><button type='button' class='edit' data-train=" + trainClass + ">Edit</button><button type='button' class='delete' data-train=" + trainClass + ">Remove</button></td>");
+      timeDiffTotal + "</td><td><button class='edit btn btn-warning' data-train=" + trainClass + ">Edit</button><button class='delete btn btn-danger' data-train=" + trainClass + ">Remove</button></td>");
+
+
   }, function(errorObject) {
       console.log("Errors handled: " + errorObject.code);
   });
