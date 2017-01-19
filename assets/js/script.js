@@ -39,9 +39,15 @@ $(document).ready(function(){
         console.log('User already signed-in Firebase.');
       }
     });
-    $('body').hide();
   }
 
+  var user = firebase.auth().currentUser;
+
+  if (user) {
+    $('panel').show();
+  } else {
+    $('panel').hide();
+  }
 
   // Declare variables
 
