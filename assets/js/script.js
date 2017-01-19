@@ -12,7 +12,7 @@ $(document).ready(function(){
 
   $(document).on('click', '.g-signin2', function() {
     firebase.auth().signInWithRedirect(provider);
-  }
+  });
   firebase.auth().getRedirectResult().then(function(result) {
   if (result.credential) {
     // This gives you a Google Access Token. You can use it to access the Google API.
