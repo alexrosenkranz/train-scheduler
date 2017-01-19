@@ -13,6 +13,7 @@ $(document).ready(function(){
   // Firebase Authentication
   function onSignIn(googleUser) {
     console.log('Google Auth Response', googleUser);
+
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
       unsubscribe();
@@ -21,6 +22,7 @@ $(document).ready(function(){
         // Build Firebase credential with the Google ID token.
         var credential = firebase.auth.GoogleAuthProvider.credential(
             googleUser.getAuthResponse().id_token);
+
         // Sign in with credential from the Google user.
         firebase.auth().signInWithCredential(credential).catch(function(error) {
           // Handle Errors here.
@@ -32,19 +34,13 @@ $(document).ready(function(){
           var credential = error.credential;
           // ...
         });
+        $('body').hide();
       } else {
         console.log('User already signed-in Firebase.');
       }
     });
   }
-  firebase.auth().onAuthStateChanged(firebaseUser => {
-    if(firebaseUser) {
-      console.log(firebaseUser);
-    } else {
-      console.log('nope');
-    }
 
-  })
 
   // Declare variables
 
