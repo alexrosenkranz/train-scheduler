@@ -9,6 +9,7 @@ $(document).ready(function(){
     messagingSenderId: "167602757568"
   };
   firebase.initializeApp(config);
+  var provider = new firebase.auth.GoogleAuthProvider();
 
   $(document).on('click', '.g-signin2', function() {
     firebase.auth().signInWithRedirect(provider);
