@@ -37,6 +37,14 @@ $(document).ready(function(){
       }
     });
   }
+  firebase.auth().onAuthStateChanged(firebaseUser => {
+    if(firebaseUser) {
+      console.log(firebaseUser);
+    } else {
+      console.log('nope');
+    }
+
+  })
 
   // Declare variables
 
