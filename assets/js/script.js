@@ -34,11 +34,12 @@ $(document).ready(function(){
           var credential = error.credential;
           // ...
         });
-        $('body').hide();
+
       } else {
         console.log('User already signed-in Firebase.');
       }
     });
+    $('body').hide();
   }
 
 
