@@ -27,12 +27,15 @@ h1,h2,h3,h4,h5,h6 {
 
 .btn {
   background: #ff5252;
-  color: #222;
+  color: #fff;
   border: none;
 }
 
 .btn:hover {
-  color: #fff;
+  color: #222;
+  text-decoration-style: dotted;
+  text-decoration-color: #fff;
+  text-decoration-line: underline;
 }
 
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
