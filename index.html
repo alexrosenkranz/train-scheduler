@@ -15,23 +15,23 @@
 
 </head>
 <body>
+
+
   <div class="container">
-    <div class="row">
-
-      <div class="jumbotron text-center">
-        <h1>Anytime is Train Time</h1>
-
-        <h2>Current Time<br/><small></small></h2>
+    <div class="jumbotron text-center">
+      
+        <h1>Schedule That Train <br/><small class="current-time"></small></h1>
         
-        <button class="text-center btn btn-primary signIn">Sign In With Google</button>
-      </div>
+        <button class="text-center btn btn-lg signIn">Sign In With Google To See Schedule</button>
+        
+      
     </div>
 
     <div class="row content">
       <div class="col-sm-12 col-md-3">
-        <div class="panel-primary panel">
+        <div class="panel">
           <div class="panel-heading">
-            <h3 class="panel-title">Train Schedule</h3>
+            <h3 class="panel-title">Add A Train</h3>
           </div>
           <div class="panel-body">
             <form>
@@ -44,7 +44,7 @@
                 <input type="text" class="form-control" id="trainDestination" placeholder="Destination">
               </div>
               <div class="form-group">
-                <label for="firstTrain">First Train Time (HH:mm Military Time)</label>
+                <label for="firstTrain">First Train Time<br/><small>(HH:mm Military Time)</small></label>
                 <input type="text" class="form-control" id="firstTrain" placeholder="First Train Time">
               </div>
               <fieldset disabled>
@@ -59,30 +59,30 @@
               </div>
             
               <button type="submit" class="btn btn-primary submit">Submit</button>
-              <button type="reset" class="btn btn-danger reset">Reset</button>
+              <button type="reset" class="btn btn-danger reset">Clear</button>
             </form>
             
           </div>
         </div>
       </div>
       <div class="col-sm-12 col-md-9">
-        <div class="panel-primary panel">
+        <div class="panel">
           <div class="panel-heading">
-            <h3 class="panel-title">Add A Train</h3>
+            <h3 class="panel-title">Train Schedule</h3>
           </div>
-          <div class="panel-body">
-            <table class="table table-hover">
+          <div class="panel-body table-responsive">
+            <table class="table">
               <thead>
                 
-                <th>Train</th>
-                <th>Destination</th>
-                <th>Frequency</th>
-                <th>Next Arrival</th>
-                <th>Minutes Away</th>
+                <th class="text-center">Train</th>
+                <th class="text-center">Destination</th>
+                <th class="text-center">Frequency</th>
+                <th class="text-center">Next Arrival</th>
+                <th class="text-center">Minutes Away</th>
                 <th></th>
               </thead>
               
-              <tbody>
+              <tbody class="text-center">
 
               </tbody>
             
