@@ -28,14 +28,16 @@ h1,h2,h3,h4,h5,h6 {
 .btn {
   background: #ff5252;
   color: #fff;
-  border: none;
+  border: 2px #000 solid;
+  transition-duration: 1s;
+  transition-timing-function: ease-in-out;
+  transition-property: all;
 }
 
 .btn:hover {
-  color: #222;
-  text-decoration-style: dotted;
-  text-decoration-color: #fff;
-  text-decoration-line: underline;
+  color: #fff;
+  background: #000;
+  border: 2px #ff5252 solid;
 }
 
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
@@ -64,4 +66,8 @@ h1,h2,h3,h4,h5,h6 {
   border-bottom: 1px dotted #fff;
   margin: 10px 0;
   padding: 0 0 10px 0;
+}
+
+.help-block {
+  color: #fff;
 }

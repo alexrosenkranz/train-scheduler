@@ -55,16 +55,10 @@ $(document).ready(function(){
   function loggedIn() {
 
     // Declare variables
-
     var dataRef = firebase.database();
     var editTrainKey = '';
     var fbTime = moment();
     var newTime;
-
-
-    // Set form function to accept inputs and set them into Firebase Object
-      // Make sure time is converted properly for storage (unix)
-      // Append new item into table
 
     $('.submit').on('click', function(e) {
 
@@ -76,32 +70,37 @@ $(document).ready(function(){
       var trainTime = moment($('#firstTrain').val().trim(),"HH:mm").format("X");
       var trainFreq = $('#trainFrequency').val().trim();
 
-      // Clear form data
-      $('#trainName').val('');
-      $('#trainDestination').val('');
-      $('#firstTrain').val('');
-      $('#trainFrequency').val('');
-      $('#trainKey').val('');
+      if (trainName != '' && trainDestination != '' && trainTime != '' && trainFreq != '') {
+        // Clear form data
+        $('#trainName').val('');
+        $('#trainDestination').val('');
+        $('#firstTrain').val('');
+        $('#trainFrequency').val('');
+        $('#trainKey').val('');
 
-      fbTime = moment().format('X');
-      // Push to firebase
-      if (editTrainKey == ''){ 
-        dataRef.ref().child('trains').push({
-          trainName: trainName,
-          trainDestination: trainDestination,
-          trainTime: trainTime,
-          trainFreq: trainFreq,
-          currentTime: fbTime,
-        })
-      } else if (editTrainKey != '') {
-        dataRef.ref('trains/' + editTrainKey).update({
-          trainName: trainName,
-          trainDestination: trainDestination,
-          trainTime: trainTime,
-          trainFreq: trainFreq,
-          currentTime: fbTime,
-        })
-        editTrainKey = '';
+        fbTime = moment().format('X');
+        // Push to firebase
+        if (editTrainKey == ''){ 
+          dataRef.ref().child('trains').push({
+            trainName: trainName,
+            trainDestination: trainDestination,
+            trainTime: trainTime,
+            trainFreq: trainFreq,
+            currentTime: fbTime,
+          })
+        } else if (editTrainKey != '') {
+          dataRef.ref('trains/' + editTrainKey).update({
+            trainName: trainName,
+            trainDestination: trainDestination,
+            trainTime: trainTime,
+            trainFreq: trainFreq,
+            currentTime: fbTime,
+          })
+          editTrainKey = '';
+        }
+        $('.help-block').removeClass('bg-danger');
+      } else {
+        $('.help-block').addClass('bg-danger');
       }
 
     });
@@ -148,7 +147,7 @@ $(document).ready(function(){
         trainId.trainDestination + "</td><td>" + 
         trainId.trainFreq + "</td><td>" +
         newTime + "</td><td>" +
-        timeDiffTotal + "</td><td><button class='edit btn btn-warning' data-train=" + trainClass + ">Edit</button> <button class='delete btn btn-danger' data-train=" + trainClass + ">Remove</button></td></tr>");
+        timeDiffTotal + "</td><td><button class='edit btn' data-train=" + trainClass + "><i class='glyphicon glyphicon-pencil'></i></button> <button class='delete btn' data-train=" + trainClass + "><i class='glyphicon glyphicon-remove'></i></button></td></tr>");
 
     });
     }, function(errorObject) {
@@ -176,7 +175,7 @@ $(document).ready(function(){
         trainId.trainDestination + "</td><td>" + 
         trainId.trainFreq + "</td><td>" +
         newTime + "</td><td>" +
-        timeDiffTotal + "</td><td><button class='edit btn btn-warning' data-train=" + trainClass + ">Edit</button><button class='delete btn btn-danger' data-train=" + trainClass + ">Remove</button></td>");
+        timeDiffTotal + "</td><td><button class='edit btn' data-train=" + trainClass + "><i class='glyphicon glyphicon-pencil'></i></button><button class='delete btn' data-train=" + trainClass + "><i class='glyphicon glyphicon-remove'></i></button></td>");
 
     }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
